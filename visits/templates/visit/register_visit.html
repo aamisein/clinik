@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load jalali_tags %}
+{% load jformat %}
+
+
+
+{% block content %}
+<div class="flex items-center justify-end">
+    <!--Toggle Button-->
+    <div id="theme-toggle"
+        class="relative w-16 h-8 mb-5 rounded-full bg-gray-300 dark:bg-gray-700 p-1 flex items-center cursor-pointer transition-all duration-300">
+        <!-- sun Icon(Light Mode)-->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6 text-yellow-500 dark:hidden transition-all duration-300 absolute left-1">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+        </svg>
+        <!--Toggle Ball-->
+        <div
+            class="absolute left-1 dark:left-8 w-6 h-6 bg-white dark:bg-gray-900 rounded-full shadow-md transition-all duration-300">
+        </div>
+        <!--Moon Icon (Dark Mode)-->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6 text-gray-900 dark:text-gray-200 transition-all duration-300 absolute right-1 hidden dark:block">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+        </svg>
+    </div>
+</div>
+
+
+
+
+
+<div class="text-gray-100 w-full max-w-full mb-10  bg-gradient-to-br from-yellow-950 to-neutral-400 p-4 rounded-md shadow-2xl"
+    x-data="{ tab: 'tab1' }">
+    <!--Tabs-->
+    <div class="flex border-b  ">
+        <button @click=" tab ='tab1' "
+            :class="text-gray-100 tab ==='tab1' ? 'border-stone-400 text-neutral-900' : 'border-transparent text-gray-500'"
+            class=" w-1/2 py-2  text-center border-b-4 font-medium"> ویزیت های امروز --
+            {{today|to_jalali:'%Y/%m/%d'}}</button>
+        <button @click="tab = 'tab2' "
+            :class="text-gray-100 tab === 'tab2' ? 'border-neutral-900 text-stone-400' : 'border-transparent text-gray-500'"
+            class="w-1/2 py-2 text-center border-b-4 font-medium"> نوبت های امروز </button>
+    </div>
+    <!--Tab Content-->
+    <div class="p-4 ">
+        <div x-cloak x-show="tab ==='tab1'" class="transition-all">
+            <h1 class="text-lg font-bold"> لیست مراجعین امروز </h1>
+            <ul
+                class="text-gray-700 bg-gray-100 rounded-md pt-1 pr-2 pb-1 flex flex-col ring-2 ring-gray-200 mt-2 ">
+                {% for visit in todayVisit %}
+                <li>{{ visit.first_name }} {{ visit.last_name }} - {{ visit.service.name }} - {{ visit.current_visit_date }}</li>
+                {% empty%}
+                <li class="text-gray-800  hover:bg-white/20 w-1/2 ">هنوز هیچ ویزیتی ثبت نشده</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="transition-all" x-cloak x-show=" tab ==='tab2'">
+            <h1 class="text-lg font-bold"> لیست نوبت های امروز</h1>
+            <ul
+                class="text-gray-700 bg-gray-100 rounded-md pt-1 pr-2 pb-1 flex flex-col ring-2 ring-gray-200 mt-2 ">
+                {%for turn in todayTurns%}
+                <li>{{ turn.first_name }} {{ turn.last_name }} - {{ turn.service.name }} - {{ turn. }}</li>
+                {% empty%}
+                <li class="text-gray-800  hover:bg-white/20 w-1/2 "> برای امروز نوبتی رزرو نشده </li>
+                {%endfor%}
+
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class=" bg-black/20 backdrop-blur-xs p-8 border   rounded-lg shadow-2xl w-full max-w-md">
+    <h2 class="text-2xl font-bold text-center mb-6">فرم ثبت نوبت</h2>
+    <form class="text-gray-50" method="post">
+        {% csrf_token %}
+       
+        {{ form.media }}
+        <!--First Name-->
+        <div class="mb-4">
+            {{ form.first_name.label_tag }}
+            {{ form.first_name }}
+            {{ form.first_name.errors }}
+        </div>
+        <!--Last Name-->
+        <div class="mb-4">
+            {{ form.last_name.label_tag }}
+            {{ form.last_name }}
+            {{ form.last_name.errors }}
+        </div>
+
+        <div>
+            {{ form.phone.label_tag }}
+            {{ form.phone }}
+            {{ form.phone.errors }}
+        </div>
+
+        <div>
+            {{ form.current_visit_date.label_tag }}
+            {{ form.current_visit_date }}
+            {{ form.current_visit_date.errors }}
+        </div>
+
+        <div>
+            {{ form.next_visit_date.label_tag }}
+            {{ form.next_visit_date }}
+            {{ form.next_visit_date.errors }}
+        </div>
+
+        <div>
+            {{ form.service.label_tag }}
+            {{ form.service }}
+            {{ form.service.errors }}
+        </div>
+
+
+        <button type="submit"
+            class="w-full bg-[#D64933]  text-blue-200 py-2 rounded-md hover:text-stone-800 focus:ring-2 ring-stone-600 transition">ثبت
+            نوبت</button>
+    </form>
+
+
+</div>
+
+
+{% endblock %}
+
+
+  
+
+
+
+
+
+
+
