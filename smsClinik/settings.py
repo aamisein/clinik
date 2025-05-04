@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'jalali_date',
     'django_jalali',
     "visits",
-   
+    'accounts',
 ]
 
 
@@ -177,3 +177,8 @@ JALALI_SETTINGS = {
         ]
     },
 }
+
+# Authentication settings
+LOGIN_REDIRECT_URL = 'visits:home'
+LOGOUT_REDIRECT_URL = 'accounts:login'
+LOGIN_URL = 'accounts:login'
