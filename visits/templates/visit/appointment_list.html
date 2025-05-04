@@ -27,6 +27,7 @@
                         <th class="px-6 py-3 text-right">نوع خدمت</th>
                         <th class="px-6 py-3 text-right">تاریخ نوبت</th>
                         <th class="px-6 py-3 text-right">عملیات</th>
+                        <th class=" px-6 py-3 text-center">اطلاع رسانی</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -36,10 +37,18 @@
                             <td class="px-6 py-3">{{ appointment.phone }}</td>
                             <td class="px-6 py-3">{{ appointment.service.name }}</td>
                             <td class="px-6 py-3">{{ appointment.next_visit_date }}</td>
+                            
                             <td class="px-6 py-3 flex justify-center space-x-2">
-                                <button class="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500">ویرایش</button>
-                                <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">حذف</button>
+                                <a href="{% url 'visits:visit_update' appointment.pk %}?next={% url 'visits:appointment_list' %}" 
+                                   class="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500">ویرایش</a>
+                                <a href="{% url 'visits:visit_delete' appointment.pk %}?next={% url 'visits:appointment_list' %}" 
+                                   class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">حذف</a>
                             </td>
+                            {%if appointment.SMS_sent %}
+                              <td class=" px-6 py-3 text-blue-400 font-bold"> یاد آوری شده</td>
+                            {%else%}
+                              <td class=" px-6 py-3 text-pink-400 font-bold">یا آوری نشده </td>
+                            {%endif%}
                         </tr>
                     {% empty %}
                         <tr>

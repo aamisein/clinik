@@ -76,7 +76,12 @@ class VisitUpdateView(UpdateView):
     model = Visit
     form_class = VisitForm
     template_name = 'visit/visit_update.html'
-    success_url = reverse_lazy('visits:visit_list')
+    
+    def get_success_url(self):
+        next_url = self.request.GET.get('next')
+        if next_url:
+            return next_url
+        return reverse_lazy('visits:visit_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -85,8 +90,13 @@ class VisitUpdateView(UpdateView):
 
 class VisitDeleteView(DeleteView):
     model = Visit
-    success_url = reverse_lazy('visits:visit_list')
     template_name = 'visit/visit_confirm_delete.html'
+
+    def get_success_url(self):
+        next_url = self.request.GET.get('next')
+        if next_url:
+            return next_url
+        return reverse_lazy('visits:visit_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

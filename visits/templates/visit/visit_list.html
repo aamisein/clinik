@@ -42,9 +42,9 @@
                         <!-- <td class="px-6 py-3" id="visit-time-1"></td> -->
                         <!-- <td class=" px-6 py-3 text-yellow-600 font-bold">تایید شد</td> -->
                         <td class="px-6 py-3 flex justify-center space-x-2">
-                            <a href="{% url 'visits:visit_update' visit.pk %}" 
+                            <a href="{% url 'visits:visit_update' visit.pk %}?next={% url 'visits:visit_list' %}" 
                                class="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500">ویرایش</a>
-                            <a href="{% url 'visits:visit_delete' visit.pk %}" 
+                            <a href="{% url 'visits:visit_delete' visit.pk %}?next={% url 'visits:visit_list' %}" 
                                class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">حذف</a>
                         </td>
                      </tr>
